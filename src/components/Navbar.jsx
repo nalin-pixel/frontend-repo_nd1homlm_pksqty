@@ -1,14 +1,18 @@
-import { Home, MessageSquare, School, FileText, Activity } from "lucide-react";
+import { Link, useLocation } from 'react-router-dom';
+import { Home, MessageSquare, School, FileText, Activity } from 'lucide-react';
 
-const primary = "#2563eb";
+const primary = '#2563eb';
 
-export default function Navbar({ current, onNavigate }) {
+export default function Navbar() {
+  const location = useLocation();
+  const current = location.pathname;
+
   const items = [
-    { key: "home", label: "Home", icon: Home },
-    { key: "chat", label: "Chatbot", icon: MessageSquare },
-    { key: "colleges", label: "Colleges", icon: School },
-    { key: "essays", label: "Essays", icon: FileText },
-    { key: "activities", label: "Activities", icon: Activity },
+    { to: '/', label: 'Home', icon: Home },
+    { to: '/chat', label: 'Chatbot', icon: MessageSquare },
+    { to: '/colleges', label: 'Colleges', icon: School },
+    { to: '/essays', label: 'Essays', icon: FileText },
+    { to: '/activities', label: 'Activities', icon: Activity },
   ];
 
   return (
@@ -25,31 +29,31 @@ export default function Navbar({ current, onNavigate }) {
             </div>
           </div>
           <nav className="hidden md:flex items-center gap-2">
-            {items.map(({ key, label, icon: Icon }) => (
-              <button
-                key={key}
-                onClick={() => onNavigate(key)}
+            {items.map(({ to, label, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
                 className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
-                  current === key
-                    ? "bg-white/90 border-slate-200 shadow-sm"
-                    : "bg-white/60 hover:bg-white border-transparent"
+                  current === to
+                    ? 'bg-white/90 border-slate-200 shadow-sm'
+                    : 'bg-white/60 hover:bg-white border-transparent'
                 }`}
-                style={{ color: current === key ? primary : "#334155" }}
-                aria-current={current === key ? "page" : undefined}
+                style={{ color: current === to ? primary : '#334155' }}
+                aria-current={current === to ? 'page' : undefined}
               >
                 <Icon size={18} />
                 {label}
-              </button>
+              </Link>
             ))}
           </nav>
           <div className="md:hidden">
             <select
               value={current}
-              onChange={(e) => onNavigate(e.target.value)}
+              onChange={(e) => (window.location.href = e.target.value)}
               className="rounded-lg border-slate-200 text-slate-700"
             >
-              {items.map(({ key, label }) => (
-                <option key={key} value={key}>{label}</option>
+              {items.map(({ to, label }) => (
+                <option key={to} value={to}>{label}</option>
               ))}
             </select>
           </div>
